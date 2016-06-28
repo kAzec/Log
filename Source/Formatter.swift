@@ -23,15 +23,15 @@
 //
 
 public enum Component {
-    case Date(String)
-    case Message
-    case Level
-    case File(fullPath: Bool, fileExtension: Bool)
-    case Line
-    case Column
-    case Function
-    case Location
-    case Block(() -> Any?)
+    case date(String)
+    case message
+    case level
+    case file(fullPath: Bool, fileExtension: Bool)
+    case line
+    case column
+    case function
+    case location
+    case closure(() -> Any?)
 }
 
 public class Formatters {}
@@ -53,7 +53,7 @@ public class Formatter: Formatters {
     internal var description: String {
         return String(format: format, arguments: components.map { (component: Component) -> CVarArgType in
             return String(component).uppercaseString
-        })
+            })
     }
     
     /**
@@ -99,23 +99,23 @@ public class Formatter: Formatters {
     internal func format(level level: Level, items: [Any], separator: String, terminator: String, file: String, line: Int, column: Int, function: String, date: NSDate) -> String {
         let arguments = components.map { (component: Component) -> CVarArgType in
             switch component {
-            case .Date(let dateFormat):
+            case .date(let dateFormat):
                 return format(date: date, dateFormat: dateFormat)
-            case .File(let fullPath, let fileExtension):
+            case .file(let fullPath, let fileExtension):
                 return format(file: file, fullPath: fullPath, fileExtension: fileExtension)
-            case .Function:
+            case .function:
                 return String(function)
-            case .Line:
+            case .line:
                 return String(line)
-            case .Column:
+            case .column:
                 return String(column)
-            case .Level:
+            case .level:
                 return format(level: level)
-            case .Message:
+            case .message:
                 return items.map({ String($0) }).joinWithSeparator(separator)
-            case .Location:
+            case .location:
                 return format(file: file, line: line)
-            case .Block(let block):
+            case .closure(let block):
                 return block().flatMap({ String($0) }) ?? ""
             }
         }
@@ -141,23 +141,23 @@ public class Formatter: Formatters {
         
         let arguments = components.map { (component: Component) -> CVarArgType in
             switch component {
-            case .Date(let dateFormat):
+            case .date(let dateFormat):
                 return format(date: date, dateFormat: dateFormat)
-            case .File(let fullPath, let fileExtension):
+            case .file(let fullPath, let fileExtension):
                 return format(file: file, fullPath: fullPath, fileExtension: fileExtension)
-            case .Function:
+            case .function:
                 return String(function)
-            case .Line:
+            case .line:
                 return String(line)
-            case .Column:
+            case .column:
                 return String(column)
-            case .Level:
+            case .level:
                 return format(description: description)
-            case .Message:
+            case .message:
                 return format(average: average, relativeStandardDeviation: relativeStandardDeviation)
-            case .Location:
+            case .location:
                 return format(file: file, line: line)
-            case .Block(let block):
+            case .closure(let block):
                 return block().flatMap({ String($0) }) ?? ""
             }
         }
@@ -210,7 +210,7 @@ private extension Formatter {
         return [
             format(file: file, fullPath: false, fileExtension: true),
             String(line)
-        ].joinWithSeparator(":")
+            ].joinWithSeparator(":")
     }
     
     /**
@@ -240,7 +240,7 @@ private extension Formatter {
     func format(description description: String?) -> String {
         var text = "MEASURE"
         
-        if let color = logger.theme?.colors[.Debug] {
+        if let color = logger.theme?.colors[.debug] {
             text = text.withColor(color)
         }
         

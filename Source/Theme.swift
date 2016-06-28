@@ -48,11 +48,11 @@ public class Theme: Themes {
      */
     public init(trace: String, debug: String, info: String, warning: String, error: String) {
         self.colors = [
-            .Trace:   Theme.formatHex(trace),
-            .Debug:   Theme.formatHex(debug),
-            .Info:    Theme.formatHex(info),
-            .Warning: Theme.formatHex(warning),
-            .Error:   Theme.formatHex(error)
+            .trace:   Theme.formatHex(trace),
+            .debug:   Theme.formatHex(debug),
+            .info:    Theme.formatHex(info),
+            .warning: Theme.formatHex(warning),
+            .error:   Theme.formatHex(error)
         ]
     }
     
