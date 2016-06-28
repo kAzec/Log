@@ -22,10 +22,12 @@
 // SOFTWARE.
 //
 
+import Foundation
+
 private let benchmarker = Benchmarker()
 
 public enum Level {
-    case Trace, Debug, Info, Warning, Error
+    case trace, debug, info, warning, error
     
     var description: String {
         return String(self).uppercaseString
@@ -68,7 +70,7 @@ public class Logger {
     }
     
     /// The queue used for logging.
-    private let queue = dispatch_queue_create("delba.log", DISPATCH_QUEUE_SERIAL)
+    private lazy var queue = dispatch_queue_create("delba.log", DISPATCH_QUEUE_SERIAL)
     
     /**
      Creates and returns a new logger.
@@ -99,7 +101,21 @@ public class Logger {
      - parameter function:   The function in which the log happens.
      */
     public func trace(items: Any..., separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
-        log(.Trace, items, separator, terminator, file, line, column, function)
+        log(.trace, items, separator, terminator, file, line, column, function)
+    }
+    
+    /**
+     Logs a message with a trace severity level.
+     
+     - parameter message:    The message to log.
+     - parameter terminator: The terminator of the log message.
+     - parameter file:       The file in which the log happens.
+     - parameter line:       The line at which the log happens.
+     - parameter column:     The column at which the log happens.
+     - parameter function:   The function in which the log happens.
+     */
+    public func trace(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
+        log(.trace, [message()], "", terminator, file, line, column, function)
     }
     
     /**
@@ -114,7 +130,21 @@ public class Logger {
      - parameter function:   The function in which the log happens.
      */
     public func debug(items: Any..., separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
-        log(.Debug, items, separator, terminator, file, line, column, function)
+        log(.debug, items, separator, terminator, file, line, column, function)
+    }
+    
+    /**
+     Logs a message with a trace severity level.
+     
+     - parameter message:    The message to log.
+     - parameter terminator: The terminator of the log message.
+     - parameter file:       The file in which the log happens.
+     - parameter line:       The line at which the log happens.
+     - parameter column:     The column at which the log happens.
+     - parameter function:   The function in which the log happens.
+     */
+    public func debug(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
+        log(.debug, [message()], "", terminator, file, line, column, function)
     }
     
     /**
@@ -129,7 +159,21 @@ public class Logger {
      - parameter function:   The function in which the log happens.
      */
     public func info(items: Any..., separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
-        log(.Info, items, separator, terminator, file, line, column, function)
+        log(.info, items, separator, terminator, file, line, column, function)
+    }
+    
+    /**
+     Logs a message with a trace severity level.
+     
+     - parameter message:    The message to log.
+     - parameter terminator: The terminator of the log message.
+     - parameter file:       The file in which the log happens.
+     - parameter line:       The line at which the log happens.
+     - parameter column:     The column at which the log happens.
+     - parameter function:   The function in which the log happens.
+     */
+    public func info(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
+        log(.info, [message()], "", terminator, file, line, column, function)
     }
     
     /**
@@ -144,7 +188,21 @@ public class Logger {
      - parameter function:   The function in which the log happens.
      */
     public func warning(items: Any..., separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
-        log(.Warning, items, separator, terminator, file, line, column, function)
+        log(.warning, items, separator, terminator, file, line, column, function)
+    }
+    
+    /**
+     Logs a message with a trace severity level.
+     
+     - parameter message:    The message to log.
+     - parameter terminator: The terminator of the log message.
+     - parameter file:       The file in which the log happens.
+     - parameter line:       The line at which the log happens.
+     - parameter column:     The column at which the log happens.
+     - parameter function:   The function in which the log happens.
+     */
+    public func warning(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
+        log(.warning, [message()], "", terminator, file, line, column, function)
     }
     
     /**
@@ -159,7 +217,21 @@ public class Logger {
      - parameter function:   The function in which the log happens.
      */
     public func error(items: Any..., separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
-        log(.Error, items, separator, terminator, file, line, column, function)
+        log(.error, items, separator, terminator, file, line, column, function)
+    }
+    
+    /**
+     Logs a message with a trace severity level.
+     
+     - parameter message:    The message to log.
+     - parameter terminator: The terminator of the log message.
+     - parameter file:       The file in which the log happens.
+     - parameter line:       The line at which the log happens.
+     - parameter column:     The column at which the log happens.
+     - parameter function:   The function in which the log happens.
+     */
+    public func error(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, column: Int = #column, function: String = #function) {
+        log(.error, [message()], "", terminator, file, line, column, function)
     }
     
     /**
@@ -174,14 +246,14 @@ public class Logger {
      - parameter column:     The column at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    private func log(level: Level, _ items: [Any], _ separator: String, _ terminator: String, _ file: String, _ line: Int, _ column: Int, _ function: String) {
+    private func log(level: Level, @autoclosure _ items: Void -> [Any], _ separator: String, _ terminator: String, _ file: String, _ line: Int, _ column: Int, _ function: String) {
         guard enabled && level >= minLevel else { return }
         
         let date = NSDate()
         
         let result = formatter.format(
             level: level,
-            items: items,
+            items: items(),
             separator: separator,
             terminator: terminator,
             file: file,
@@ -208,7 +280,7 @@ public class Logger {
      - parameter block:       The block to measure.
      */
     public func measure(description: String? = nil, iterations n: Int = 10, file: String = #file, line: Int = #line, column: Int = #column, function: String = #function, block: () -> Void) {
-        guard enabled && .Debug >= minLevel else { return }
+        guard enabled && .debug >= minLevel else { return }
         
         let measure = benchmarker.measure(description, iterations: n, block: block)
         
