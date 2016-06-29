@@ -22,21 +22,22 @@
 // SOFTWARE.
 //
 
-public enum Component {
-    case date(String)
-    case message
-    case level
-    case file(fullPath: Bool, fileExtension: Bool)
-    case line
-    case column
-    case function
-    case location
-    case closure(() -> Any?)
-}
 
-public class Formatters {}
-
-public class Formatter: Formatters {
+public final class Formatter: CustomStringConvertible {
+    public enum AlignDirection {
+        case left, right
+    }
+    
+    public enum Component {
+        case date(format: String)
+        case level(equalWidth: Bool, align: AlignDirection)
+        case file(fullPath: Bool, withExtension: Bool)
+        case line
+        case function
+        case location
+        case message
+    }
+    
     /// The formatter format.
     private var format: String
     
@@ -46,26 +47,11 @@ public class Formatter: Formatters {
     /// The date formatter.
     private let dateFormatter = NSDateFormatter()
     
-    /// The formatter logger.
-    internal weak var logger: Logger!
-    
     /// The formatter textual representation.
-    internal var description: String {
+    public var description: String {
         return String(format: format, arguments: components.map { (component: Component) -> CVarArgType in
-            return String(component).uppercaseString
-            })
-    }
-    
-    /**
-     Creates and returns a new formatter with the specified format and components.
-     
-     - parameter format:     The formatter format.
-     - parameter components: The formatter components.
-     
-     - returns: A newly created formatter.
-     */
-    public convenience init(_ format: String, _ components: Component...) {
-        self.init(format, components)
+            return "#" + String(component)
+        })
     }
     
     /**
@@ -87,78 +73,35 @@ public class Formatter: Formatters {
      - parameter level:      The severity level.
      - parameter items:      The items to format.
      - parameter separator:  The separator between the items.
-     - parameter terminator: The terminator of the formatted string.
      - parameter file:       The log file path.
      - parameter line:       The log line number.
-     - parameter column:     The log column number.
      - parameter function:   The log function.
      - parameter date:       The log date.
      
-     - returns: A formatted string.
+     - returns: The formatted string.
      */
-    internal func format(level level: Level, items: [Any], separator: String, terminator: String, file: String, line: Int, column: Int, function: String, date: NSDate) -> String {
-        let arguments = components.map { (component: Component) -> CVarArgType in
-            switch component {
-            case .date(let dateFormat):
-                return format(date: date, dateFormat: dateFormat)
-            case .file(let fullPath, let fileExtension):
-                return format(file: file, fullPath: fullPath, fileExtension: fileExtension)
-            case .function:
-                return String(function)
-            case .line:
-                return String(line)
-            case .column:
-                return String(column)
-            case .level:
-                return format(level: level)
-            case .message:
-                return items.map({ String($0) }).joinWithSeparator(separator)
-            case .location:
-                return format(file: file, line: line)
-            case .closure(let block):
-                return block().flatMap({ String($0) }) ?? ""
-            }
+    func format(level level: Level, items: [String], separator: String, file: String, line: Int, function: String, date: NSDate, theme: Theme? = nil) -> String {
+        
+        func colorize(as option: Theme.ComponentOptions, _ text: String) -> String {
+            return theme?.colorizeText(text, level: level, option: option) ?? text
         }
-        
-        return String(format: format, arguments: arguments) + terminator
-    }
-    
-    /**
-     Formats a string with the formatter format and components.
-     
-     - parameter description:               The measure description.
-     - parameter average:                   The average time.
-     - parameter relativeStandardDeviation: The relative standard description.
-     - parameter file:                      The log file path.
-     - parameter line:                      The log line number.
-     - parameter column:                    The log column number.
-     - parameter function:                  The log function.
-     - parameter date:                      The log date.
-     
-     - returns: A formatted string.
-     */
-    func format(description description: String?, average: Double, relativeStandardDeviation: Double, file: String, line: Int, column: Int, function: String, date: NSDate) -> String {
-        
-        let arguments = components.map { (component: Component) -> CVarArgType in
+
+        let arguments = components.map { component -> CVarArgType in
             switch component {
-            case .date(let dateFormat):
-                return format(date: date, dateFormat: dateFormat)
-            case .file(let fullPath, let fileExtension):
-                return format(file: file, fullPath: fullPath, fileExtension: fileExtension)
+            case .date(let format):
+                return colorize(as: .date, formatDate(date, format: format))
+            case .level(let equalWidth, let align):
+                return colorize(as: .level, formatLevel(level, equalWidth: equalWidth, align: align))
+            case .file(let fullPath, let withExtension):
+                return colorize(as: .file, formatFile(file, fullPath: fullPath, withExtension: withExtension))
             case .function:
-                return String(function)
+                return colorize(as: .function, formatFunction(function))
             case .line:
-                return String(line)
-            case .column:
-                return String(column)
-            case .level:
-                return format(description: description)
-            case .message:
-                return format(average: average, relativeStandardDeviation: relativeStandardDeviation)
+                return colorize(as: .line, formathLine(line))
             case .location:
-                return format(file: file, line: line)
-            case .closure(let block):
-                return block().flatMap({ String($0) }) ?? ""
+                return colorize(as: .location, formatLocation(file: file, line: line))
+            case .message:
+                return colorize(as: .message, formatMessage(items, separator: separator))
             }
         }
         
@@ -168,148 +111,110 @@ public class Formatter: Formatters {
 
 private extension Formatter {
     /**
-     Formats a date with the specified date format.
+     Formats a date component with the specified date format.
      
      - parameter date:       The date.
      - parameter dateFormat: The date format.
      
-     - returns: A formatted date.
+     - returns: The formatted date component.
      */
-    func format(date date: NSDate, dateFormat: String) -> String {
-        dateFormatter.dateFormat = dateFormat
+    func formatDate(date: NSDate, format: String) -> String {
+        dateFormatter.dateFormat = format
         return dateFormatter.stringFromDate(date)
     }
     
     /**
-     Formats a file path with the specified parameters.
+     Formats a level component.
+     
+     - parameter level: The level component.
+     
+     - returns: The formatted level component.
+     */
+    func formatLevel(level: Level, equalWidth: Bool, align: AlignDirection) -> String {
+        let text = level.description
+        
+        if equalWidth && text.characters.count == 4 {
+            switch align {
+            case .left:
+                return text + " "
+            case .right:
+                return " " + text
+            }
+        } else {
+            return text
+        }
+    }
+    
+    /**
+     Formats a file component with the specified parameters.
      
      - parameter file:          The file path.
      - parameter fullPath:      Whether the full path should be included.
-     - parameter fileExtension: Whether the file extension should be included.
+     - parameter withExtension: Whether the file extension should be included.
      
-     - returns: A formatted file path.
+     - returns: The formatted file component.
      */
-    func format(file file: String, fullPath: Bool, fileExtension: Bool) -> String {
+    func formatFile(file: String, fullPath: Bool, withExtension: Bool) -> String {
         var file = file
         
         if !fullPath      { file = file.lastPathComponent }
-        if !fileExtension { file = file.stringByDeletingPathExtension }
+        if !withExtension { file = file.stringByDeletingPathExtension }
         
         return file
     }
     
     /**
-     Formats a Location component with a specified file path and line number.
+     Formats a function componnet
+     
+     *In Swift 2.2 funciton with only unlabeled parameter will have its name ended without brackets.(e.g. **`#function`** is **`foo`** rather than **`foo(_:)`** or **`foo(_:_:)`** etc). It's weired since even the name of a function without parameters will be something like **`foo()`** rather than **`foo`***.
+     
+     - parameter function: The function.
+     
+     - returns: The formatted function component.
+     */
+    func formatFunction(function: String) -> String {
+        if !function.hasSuffix(")") {
+            return function + "(...)"
+        } else {
+            return function
+        }
+    }
+    
+    /**
+     Formats a line componnet
+     
+     - parameter line: The line number.
+     
+     - returns: The formatted line component.
+     */
+    func formathLine(line: Int) -> String {
+        return String(line)
+    }
+    
+    /**
+     Formats a location component with a specified file path and line number.
      
      - parameter file: The file path.
      - parameter line: The line number.
      
-     - returns: A formatted Location component.
+     - returns: The formatted location component.
      */
-    func format(file file: String, line: Int) -> String {
+    func formatLocation(file file: String, line: Int) -> String {
         return [
-            format(file: file, fullPath: false, fileExtension: true),
+            formatFile(file, fullPath: false, withExtension: true),
             String(line)
-            ].joinWithSeparator(":")
+        ].joinWithSeparator(":")
     }
     
     /**
-     Formats a Level component.
+     Formats a message component with specified items and seperator.
      
-     - parameter level: The Level component.
+     - parameter items:     The items in the message.
+     - parameter seperator: The seperator to join the items.
      
-     - returns: A formatted Level component.
+     - returns: The formatted message component.
      */
-    func format(level level: Level) -> String {
-        let text = level.description
-        
-        if let color = logger.theme?.colors[level] {
-            return text.withColor(color)
-        }
-        
-        return text
-    }
-    
-    /**
-     Formats a measure description.
-     
-     - parameter description: The measure description.
-     
-     - returns: A formatted measure description.
-     */
-    func format(description description: String?) -> String {
-        var text = "MEASURE"
-        
-        if let color = logger.theme?.colors[.debug] {
-            text = text.withColor(color)
-        }
-        
-        if let description = description {
-            text = "\(text) \(description)"
-        }
-        
-        return text
-    }
-    
-    /**
-     Formats an average time and a relative standard deviation.
-     
-     - parameter average:                   The average time.
-     - parameter relativeStandardDeviation: The relative standard deviation.
-     
-     - returns: A formatted average time and relative standard deviation.
-     */
-    func format(average average: Double, relativeStandardDeviation: Double) -> String {
-        let average = format(average: average)
-        let relativeStandardDeviation = format(relativeStandardDeviation: relativeStandardDeviation)
-        
-        return "Time: \(average) sec (\(relativeStandardDeviation) STDEV)"
-    }
-    
-    /**
-     Formats an average time.
-     
-     - parameter average: An average time.
-     
-     - returns: A formatted average time.
-     */
-    func format(average average: Double) -> String {
-        return String(format: "%.3f", average)
-    }
-    
-    /**
-     Formats a list of durations.
-     
-     - parameter durations: A list of durations.
-     
-     - returns: A formatted list of durations.
-     */
-    func format(durations durations: [Double]) -> String {
-        var format = Array(count: durations.count, repeatedValue: "%.6f").joinWithSeparator(", ")
-        format = "[\(format)]"
-        
-        return String(format: format, arguments: durations.map{ $0 as CVarArgType })
-    }
-    
-    /**
-     Formats a standard deviation.
-     
-     - parameter standardDeviation: A standard deviation.
-     
-     - returns: A formatted standard deviation.
-     */
-    func format(standardDeviation standardDeviation: Double) -> String {
-        return String(format: "%.6f", standardDeviation)
-    }
-    
-    /**
-     Formats a relative standard deviation.
-     
-     - parameter relativeStandardDeviation: A relative standard deviation.
-     
-     - returns: A formatted relative standard deviation.
-     */
-    func format(relativeStandardDeviation relativeStandardDeviation: Double) -> String {
-        return String(format: "%.3f%%", relativeStandardDeviation)
+    func formatMessage(items: [String], separator: String) -> String {
+        return items.joinWithSeparator(separator)
     }
 }

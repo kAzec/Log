@@ -1,5 +1,5 @@
 //
-// Formatters.swift
+// Formatter+Formatters.swift
 //
 // Copyright (c) 2015-2016 Damien (http://delba.io)
 //
@@ -22,26 +22,33 @@
 // SOFTWARE.
 //
 
-extension Formatters {
-    public static let Default = Formatter("[%@] %@ %@: %@", [
-        .date("yyyy-MM-dd HH:mm:ss.SSS"),
+extension Formatter {
+    public static let minimal = Formatter("%@ | %@ > %@", [
+        .level(equalWidth: true, align: .right),
         .location,
-        .level,
         .message
     ])
     
-    public static let Minimal = Formatter("%@ %@: %@", [
+    public static let concise = Formatter("[%@] %@ | %@ > %@", [
+        .date(format: "HH:mm:ss"),
+        .level(equalWidth: true, align: .right),
         .location,
-        .level,
+        .message
+    ])
+
+    public static let basic = Formatter("[%@] %@ | %@ > %@", [
+        .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
+        .level(equalWidth: true, align: .right),
+        .location,
         .message
     ])
     
-    public static let Detailed = Formatter("[%@] %@.%@:%@ %@: %@", [
-        .date("yyyy-MM-dd HH:mm:ss.SSS"),
-        .file(fullPath: false, fileExtension: false),
-        .function,
+    public static let verbose = Formatter("[%@] %@ | %@:%@ - %@\n> %@", [
+        .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
+        .level(equalWidth: true, align: .right),
+        .file(fullPath: false, withExtension: true),
         .line,
-        .level,
+        .function,
         .message
     ])
 }

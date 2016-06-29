@@ -1,5 +1,5 @@
 //
-// Utilities.swift
+// Level.swift
 //
 // Copyright (c) 2015-2016 Damien (http://delba.io)
 //
@@ -22,25 +22,18 @@
 // SOFTWARE.
 //
 
-internal extension String {
-    /// The last path component of the receiver.
-    var lastPathComponent: String {
-        return NSString(string: self).lastPathComponent
-    }
+import Foundation
+
+public enum Level: String {
+    case trace, debug, info, warn, error, fatal
     
-    /// A new string made by deleting the extension from the receiver.
-    var stringByDeletingPathExtension: String {
-        return NSString(string: self).stringByDeletingPathExtension
+    var description: String {
+        return self.rawValue.uppercaseString
     }
-    
-    /**
-     Returns a string colored with the specified color.
-     
-     - parameter color: The string representation of the color.
-     
-     - returns: A string colored with the specified color.
-     */
-    func withColor(color: String) -> String {
-        return "\u{001b}[fg\(color);\(self)\u{001b}[;"
-    }
+}
+
+extension Level: Comparable {}
+
+public func <(x: Level, y: Level) -> Bool {
+    return x.hashValue < y.hashValue
 }

@@ -23,10 +23,14 @@
 //
 
 import XCTest
+@testable import Log
 
 class LogTests: XCTestCase {
     
+    var logger: Logger!
+    
     override func setUp() {
+        logger = Logger()
         super.setUp()
     }
     
@@ -34,4 +38,47 @@ class LogTests: XCTestCase {
         super.tearDown()
     }
     
+    func testLevel() {
+        XCTAssert(Level.trace < Level.debug, "Level order is wrong. Expecting \(Level.trace) < \(Level.debug) ")
+        XCTAssert(Level.debug < Level.info , "Level order is wrong. Expecting \(Level.debug) < \(Level.info ) ")
+        XCTAssert(Level.info  < Level.warn , "Level order is wrong. Expecting \(Level.info ) < \(Level.warn ) ")
+        XCTAssert(Level.warn  < Level.error, "Level order is wrong. Expecting \(Level.warn ) < \(Level.error) ")
+        XCTAssert(Level.error < Level.fatal, "Level order is wrong. Expecting \(Level.error) < \(Level.fatal) ")
+    }
+    
+    func testLog() {
+        logger.theme = nil
+        logger.trace("No theme.")
+        logger.debug("A debug log")
+        logger.info("A info log")
+        logger.warn("A warn log")
+        logger.error("A error log")
+//        logger.fatal("A fatal log")
+        
+        logger.theme = .classic
+        logger.trace("classic theme.")
+        logger.debug("A debug log")
+        logger.info("A info log")
+        logger.warn("A warn log")
+        logger.error("A error log")
+//        logger.fatal("A fatal log")
+        
+        logger.theme = .solarized
+        logger.trace("solarized theme.")
+        logger.debug("A debug log")
+        logger.info("A info log")
+        logger.warn("A warn log")
+        logger.error("A error log")
+//        logger.fatal("A fatal log")
+        
+        logger.theme = .flat
+        logger.trace("flat theme.")
+        logger.debug("A debug log")
+        logger.info("A info log")
+        logger.warn("A warn log")
+        logger.error("A error log")
+//        logger.fatal("A fatal log")
+        
+        NSThread.sleepForTimeInterval(0.01)
+    }
 }
