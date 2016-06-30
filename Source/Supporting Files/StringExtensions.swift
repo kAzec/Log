@@ -41,7 +41,7 @@ extension String {
      - returns: A string colored with the specified foreground color.
      */
     func withForegroundColor(color: String) -> String {
-        return "\u{001b}[fg\(color);\(self)\u{001b}[;"
+        return "\u{001b}[fg\(color);\(self)\u{001b}[fg;"
     }
     
     /**
@@ -52,19 +52,19 @@ extension String {
      - returns: A string colored with the specified background color.
      */
     func withBackgroundColor(color: String) -> String {
-        return "\u{001b}[bg\(color);\(self)\u{001b}[;"
+        return "\u{001b}[bg\(color);\(self)\u{001b}[bg;"
     }
     
     func withColor(foreground foreground: String?, background: String?) -> String {
-        var result = self
-        
-        if let foreground = foreground {
-            result = result.withForegroundColor(foreground)
+        switch (foreground, background) {
+        case (.Some(let foreground), .Some(let background)):
+            return "\u{001b}[fg\(foreground);\u{001b}[bg\(background);\(self)\u{001b}[;"
+        case (.Some(let foreground), .None):
+            return withForegroundColor(foreground)
+        case (.None, .Some(let background)):
+            return withBackgroundColor(background)
+        default:
+            return self
         }
-        if let background = background {
-            result = result.withBackgroundColor(background)
-        }
-        
-        return result
     }
 }
