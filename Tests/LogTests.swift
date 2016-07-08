@@ -38,6 +38,20 @@ class LogTests: XCTestCase {
         super.tearDown()
     }
     
+    func testREADMEExample() {
+        let (one, two, three) = ("ONE", "TWO", "THREE")
+        let error = NSURLError.Cancelled as NSError
+        let Log = Logger(formatter: .verbose, theme: .classic)
+        
+        Log.trace("Called!!!")
+        Log.debug(["Who is self: ", self])
+        Log.info([one, two, three])
+        Log.warn([one, two, three], separator: " - ")
+        Log.error([error], terminator: "😱😱😱\n")
+//        Log.fatal("Fail fast!") // @noreturn
+        NSThread.sleepForTimeInterval(0.01)
+    }
+    
     func testLevel() {
         XCTAssert(Level.trace < Level.debug, "Level order is wrong. Expecting \(Level.trace) < \(Level.debug) ")
         XCTAssert(Level.debug < Level.info , "Level order is wrong. Expecting \(Level.debug) < \(Level.info ) ")

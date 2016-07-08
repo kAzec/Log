@@ -151,9 +151,9 @@
 		6D06F6BD1C189C4B0010110E = {
 			isa = PBXGroup;
 			children = (
-				6D06F6C81C189C4B0010110E /* Products */,
 				6D06F6C91C189C4B0010110E /* Sources */,
 				6D06F6D51C189C4C0010110E /* Tests */,
+				6D06F6C81C189C4B0010110E /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,8 +214,8 @@
 			isa = PBXGroup;
 			children = (
 				6DFA5CC61C21C77F003990E7 /* Formatter+DefaultFormatters.swift */,
-				6DE69DF41CDE80E100024624 /* StringExtensions.swift */,
 				6DA3FDEE1C1F921700602510 /* Theme+DefaultThemes.swift */,
+				6DE69DF41CDE80E100024624 /* StringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

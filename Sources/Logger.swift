@@ -42,6 +42,11 @@ public class Logger {
         return formatter.description
     }
     
+    /// The logger colors.
+    public var colors: String {
+        return theme?.description ?? ""
+    }
+    
     /// The queue used for logging.
     private lazy var queue = dispatch_queue_create("delba.log", DISPATCH_QUEUE_SERIAL)
     
@@ -113,7 +118,7 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     public func trace(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.trace)?(items: items().map{ String($0) }, separator: "", terminator: terminator, file: file, line: line, function: function)
+        log(.trace)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -155,7 +160,7 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     public func debug(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.debug)?(items: items().map{ String($0) }, separator: "", terminator: terminator, file: file, line: line, function: function)
+        log(.debug)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -197,7 +202,7 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     public func info(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.info)?(items: items().map{ String($0) }, separator: "", terminator: terminator, file: file, line: line, function: function)
+        log(.info)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -239,7 +244,7 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     public func warn(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.warn)?(items: items().map{ String($0) }, separator: "", terminator: terminator, file: file, line: line, function: function)
+        log(.warn)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -281,7 +286,7 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     public func error(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.error)?(items: items().map{ String($0) }, separator: "", terminator: terminator, file: file, line: line, function: function)
+        log(.error)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -326,7 +331,7 @@ public extension Logger {
      */
     @noreturn
     public func fatal(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.fatal)?(items: items().map{ String($0) }, separator: "", terminator: terminator, file: file, line: line, function: function)
+        log(.fatal)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
         exit(EXIT_FAILURE)
     }
     
