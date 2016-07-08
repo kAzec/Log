@@ -72,7 +72,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C481CED1D23F23F00112E28 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Level.swift; path = "Supporting Files/Level.swift"; sourceTree = "<group>"; };
+		4C481CED1D23F23F00112E28 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		6D06F6CA1C189C4B0010110E /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		6D06F6CC1C189C4B0010110E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6D06F6D61C189C4C0010110E /* LogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTests.swift; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 		6DACCA261C89F4C2001B63D9 /* Log OSX Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Log OSX Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DACCA3A1C89F89D001B63D9 /* Log.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Log.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DACCA431C89F89E001B63D9 /* Log iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Log iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6DE69DF41CDE80E100024624 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = "../Supporting Files/StringExtensions.swift"; sourceTree = "<group>"; };
+		6DE69DF41CDE80E100024624 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		6DFA5CC41C21C72A003990E7 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		6DFA5CC61C21C77F003990E7 /* Formatter+DefaultFormatters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Formatter+DefaultFormatters.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,7 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				6D06F6C81C189C4B0010110E /* Products */,
-				6D06F6C91C189C4B0010110E /* Source */,
+				6D06F6C91C189C4B0010110E /* Sources */,
 				6D06F6D51C189C4C0010110E /* Tests */,
 			);
 			sourceTree = "<group>";
@@ -171,17 +171,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6D06F6C91C189C4B0010110E /* Source */ = {
+		6D06F6C91C189C4B0010110E /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				6DFA5CC81C21C79F003990E7 /* Extensions */,
 				6DACCA341C89F697001B63D9 /* Supporting Files */,
 				6DA3FDEA1C1F843600602510 /* Formatter.swift */,
-				6DFA5CC41C21C72A003990E7 /* Theme.swift */,
 				4C481CED1D23F23F00112E28 /* Level.swift */,
 				6D06F6E11C189C5B0010110E /* Logger.swift */,
+				6DFA5CC41C21C72A003990E7 /* Theme.swift */,
 			);
-			path = Source;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		6D06F6D51C189C4C0010110E /* Tests */ = {
@@ -214,8 +214,8 @@
 			isa = PBXGroup;
 			children = (
 				6DFA5CC61C21C77F003990E7 /* Formatter+DefaultFormatters.swift */,
-				6DA3FDEE1C1F921700602510 /* Theme+DefaultThemes.swift */,
 				6DE69DF41CDE80E100024624 /* StringExtensions.swift */,
+				6DA3FDEE1C1F921700602510 /* Theme+DefaultThemes.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -693,7 +693,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
@@ -714,7 +714,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
@@ -735,11 +735,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = io.delba.Log;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncosmos.Log;
 				PRODUCT_NAME = Log;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -756,11 +756,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = io.delba.Log;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncosmos.Log;
 				PRODUCT_NAME = Log;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -804,12 +804,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MODULEMAP_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = io.delba.Log;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncosmos.Log;
 				PRODUCT_NAME = Log;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -827,12 +827,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MODULEMAP_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = io.delba.Log;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncosmos.Log;
 				PRODUCT_NAME = Log;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -877,13 +877,13 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = io.delba.Log;
-				PRODUCT_NAME = Log;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncosmos.Log;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -896,13 +896,13 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Sources/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = io.delba.Log;
-				PRODUCT_NAME = Log;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uncosmos.Log;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
