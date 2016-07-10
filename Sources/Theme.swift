@@ -26,23 +26,23 @@ public final class Theme: CustomStringConvertible {
     public typealias Color = UInt32
     typealias ColorDict = [Level: (foreground: String?, background: String?)]
 
-    public struct ComponentOptions: OptionSetType{
+    public struct ComponentOptions: OptionSetType {
         public let rawValue : Int
         
         public init(rawValue: Int) {
             self.rawValue = rawValue
         }
         
-        static let date     = ComponentOptions(rawValue: 1 << 0)
-        static let level    = ComponentOptions(rawValue: 1 << 1)
-        static let file     = ComponentOptions(rawValue: 1 << 2)
-        static let line     = ComponentOptions(rawValue: 1 << 3)
-        static let function = ComponentOptions(rawValue: 1 << 4)
-        static let location = ComponentOptions(rawValue: 1 << 5)
-        static let message  = ComponentOptions(rawValue: 1 << 6)
-        static let custom   = ComponentOptions(rawValue: 1 << 7)
+        public static let date     = ComponentOptions(rawValue: 1 << 0)
+        public static let level    = ComponentOptions(rawValue: 1 << 1)
+        public static let file     = ComponentOptions(rawValue: 1 << 2)
+        public static let line     = ComponentOptions(rawValue: 1 << 3)
+        public static let function = ComponentOptions(rawValue: 1 << 4)
+        public static let location = ComponentOptions(rawValue: 1 << 5)
+        public static let message  = ComponentOptions(rawValue: 1 << 6)
+        public static let custom   = ComponentOptions(rawValue: 1 << 7)
         
-        static let all      = ComponentOptions([date, level, file, line, function, location, message, custom])
+        public static let all      = ComponentOptions([date, level, file, line, function, location, message, custom])
     }
     
     public final class Builder {

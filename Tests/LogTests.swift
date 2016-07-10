@@ -41,7 +41,7 @@ class LogTests: XCTestCase {
     func testREADMEExample() {
         let (one, two, three) = ("ONE", "TWO", "THREE")
         let error = NSURLError.Cancelled as NSError
-        let Log = Logger(formatter: .verbose, theme: .classic)
+        let Log = Logger(formatter: .verbose, theme: .classic())
         
         Log.trace("Called!!!")
         Log.debug(["Who is self: ", self])
@@ -70,7 +70,7 @@ class LogTests: XCTestCase {
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        logger.theme = .classic
+        logger.theme = .classic(.level)
         logger.formatter = .concise
         logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
@@ -79,7 +79,7 @@ class LogTests: XCTestCase {
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        logger.theme = .solarized
+        logger.theme = .solarized([.level, .message])
         logger.formatter = .basic
         logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
@@ -88,7 +88,7 @@ class LogTests: XCTestCase {
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        logger.theme = .flat
+        logger.theme = .flat(.all)
         logger.formatter = .verbose
         logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")

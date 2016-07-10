@@ -59,7 +59,7 @@ public class Logger {
      
      - returns: A newly created logger.
      */
-    public init(level: Level = .trace, formatter: Formatter = .basic, theme: Theme? = .solarized) {
+    public init(level: Level = .trace, formatter: Formatter = .basic, theme: Theme? = .solarized()) {
         self.formatter = formatter
         self.theme = theme
         self.level = level

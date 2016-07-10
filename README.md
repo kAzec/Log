@@ -51,7 +51,12 @@ Log.level = .warning
 
 ### Customization
 
-- Create your own `Logger` by changing its `Theme` and/or `Formatter`.
+- Create your own `Logger` by specify its `Theme` and/or `Formatter`.
+
+```swift
+let minimal = Logger(formatter: .minimal, theme: .solarized([.level, .message]))
+let colorful = Logger(formatter: .basic, theme: .solarized(.all))
+```
 
 A suggested way of doing it is by extending `Formatters` and `Themes`:
 
