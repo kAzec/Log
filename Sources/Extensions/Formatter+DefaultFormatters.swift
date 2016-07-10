@@ -24,28 +24,28 @@
 
 extension Formatter {
     public static let minimal = Formatter("%@ | %@ > %@", [
-        .level(equalWidth: true, align: .right),
+        .level(.equalWidthByTruncatingTail(width: 1)),
         .location,
         .message
     ])
     
     public static let concise = Formatter("[%@] %@ | %@ > %@", [
         .date(format: "HH:mm:ss"),
-        .level(equalWidth: true, align: .right),
+        .level(.equalWidthByTruncatingTail(width: 4)),
         .location,
         .message
     ])
 
     public static let basic = Formatter("[%@] %@ | %@ > %@", [
         .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
-        .level(equalWidth: true, align: .right),
+        .level(.equalWidthByPrependingSpace),
         .location,
         .message
     ])
     
     public static let verbose = Formatter("[%@] %@ | %@:%@ - %@\n> %@", [
         .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
-        .level(equalWidth: true, align: .right),
+        .level(.equalWidthByPrependingSpace),
         .file(fullPath: false, withExtension: true),
         .line,
         .function,

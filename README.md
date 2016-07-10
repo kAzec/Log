@@ -16,9 +16,9 @@
     <a href="#usage">Usage</a> • <a href="#installation">Installation</a> • <a href="#license">License</a>
 </p>
 
-### Usage
+## Usage
 
-#### The basics
+### The basics
 
 - Use `Log` just as you would use `print`.
 
@@ -49,7 +49,7 @@ Log.level = .warning
 
 > The severity levels are `trace`, `debug`, `info`, `warning`, `error` and `fatal`.
 
-#### Customization
+### Customization
 
 - Create your own `Logger` by changing its `Theme` and/or `Formatter`.
 
@@ -60,7 +60,7 @@ extension Formatter {
     static func named(name: String) -> Formatter {
         return Formatter("[%@] %@ | %@ [\(name)] - %@", [
             .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
-            .level(equalWidth: true, align: .right),
+            .level(equalWidthByPrependingSpace),
             .location,
             .message
         ])
@@ -69,6 +69,7 @@ extension Formatter {
 
 extension Theme {
     static let tomorrowNight = Theme.new(
+    ).foreground(
         trace:   0xC5C8C6,
         debug:   0x81A2BE,
         info:    0xB5BD68,
@@ -77,6 +78,8 @@ extension Theme {
         fatal:   0xFFFFFF
     ).background(
         fatal:   0xCC6666
+    ).components(
+        [.level, .message]
     ).build()
 }
 ```
@@ -86,6 +89,30 @@ Then create a new logger.
 ```swift
 let Log = Logger(formatter: .named("Named"), theme: .tomorrowNight)
 ```
+
+#### Supported Formatter Components
+- `.date(format: String)`
+- `.level(LevelFormatterOption)`
+
+  > Options: .none, .equalWidthByPrependingSpace, .equalWidthByAppendingSpace, .equalWidthByTruncatingTail(width: Int)
+
+- `.file(fullPath: Bool, withExtension: Bool)`
+- `.line`
+- `.function`
+- `.location`
+- `.message`
+- `.custom(content: Void -> String)`
+
+**Note:** `Theme.ComponentOptions` is an `OptionSetType` with the same entries of above.
+
+#### Supported Theme Builder Methods
+
+- `foreground(trace: Color?, debug: Color?...)  // Set the foreground colors.`
+- `background(trace: Color?, debug: Color?...)  // Set the background colors.`
+- `components(Theme.ComponentOptions)     // Set the components to colorize.`
+
+**Note1:** `typealias Color = UInt32`
+**Note2:** Method `Theme.new(trace: Color?, debug: Color?...)` creates a theme builder with  specified **foreground** colors and a single colorizing component `.level`
 
 > See the built-in [formatters](https://github.com/kAzec/Log/blob/master/Sources/Extensions/Formatter+DefaultFormatters.swift) and [themes](https://github.com/kAzec/Log/blob/master/Sources/Extensions/Theme+DefaultThemes.swift) for more examples.
 

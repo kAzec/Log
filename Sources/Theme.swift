@@ -23,6 +23,7 @@
 //
 
 public final class Theme: CustomStringConvertible {
+    public typealias Color = UInt32
     typealias ColorDict = [Level: (foreground: String?, background: String?)]
 
     public struct ComponentOptions: OptionSetType{
@@ -39,8 +40,9 @@ public final class Theme: CustomStringConvertible {
         static let function = ComponentOptions(rawValue: 1 << 4)
         static let location = ComponentOptions(rawValue: 1 << 5)
         static let message  = ComponentOptions(rawValue: 1 << 6)
+        static let custom   = ComponentOptions(rawValue: 1 << 7)
         
-        static let all      = ComponentOptions([date, level, file, line, function, location, message])
+        static let all      = ComponentOptions([date, level, file, line, function, location, message, custom])
     }
     
     public final class Builder {
@@ -68,13 +70,20 @@ public final class Theme: CustomStringConvertible {
     
     /// The theme textual representation.
     public var description: String {
-        return colors.keys.map{
+        return colors.keys.sort().map{
             let foreground = self.colors[$0]!.foreground
             let background = self.colors[$0]!.background
             return $0.description.withColor(foreground: foreground, background: background)
         }.joinWithSeparator(" ")
     }
     
+    /**
+     Create a theme with the builder.
+     
+     - parameter builder: The builder.
+     
+     - returns: A new theme.
+     */
     public init(builder: Theme.Builder) {
         self.colors = builder.colors
         self.options = builder.options
@@ -116,7 +125,7 @@ public extension Theme {
      
      - returns: A theme builder with the specified foreground colors.
      */
-    class func new(trace trace: UInt32, debug: UInt32, info: UInt32, warn: UInt32, error: UInt32, fatal: UInt32) -> Builder {
+    class func new(trace trace: Color, debug: Color, info: Color, warn: Color, error: Color, fatal: Color) -> Builder {
         return Builder(
             colors: [
                 .trace: (colorStringFromHex(trace), nil),
@@ -144,7 +153,7 @@ public extension Theme.Builder {
      
      - returns: A theme builder  with the specified foreground colors.
      */
-    func foreground(trace trace: UInt32? = nil, debug: UInt32? = nil, info: UInt32? = nil, warn: UInt32? = nil, error: UInt32? = nil, fatal: UInt32? = nil) -> Theme.Builder {
+    func foreground(trace trace: Theme.Color? = nil, debug: Theme.Color? = nil, info: Theme.Color? = nil, warn: Theme.Color? = nil, error: Theme.Color? = nil, fatal: Theme.Color? = nil) -> Theme.Builder {
         if let trace = trace { self.colors[.trace]!.foreground = colorStringFromHex(trace) }
         if let debug = debug { self.colors[.debug]!.foreground = colorStringFromHex(debug) }
         if let info  = info  { self.colors[.info ]!.foreground = colorStringFromHex(info ) }
@@ -167,7 +176,7 @@ public extension Theme.Builder {
      
      - returns: A theme builder  with the specified background colors.
      */
-    func background(trace trace: UInt32? = nil, debug: UInt32? = nil, info: UInt32? = nil, warn: UInt32? = nil, error: UInt32? = nil, fatal: UInt32? = nil) -> Theme.Builder {
+    func background(trace trace: Theme.Color? = nil, debug: Theme.Color? = nil, info: Theme.Color? = nil, warn: Theme.Color? = nil, error: Theme.Color? = nil, fatal: Theme.Color? = nil) -> Theme.Builder {
         if let trace = trace { self.colors[.trace]!.background = colorStringFromHex(trace) }
         if let debug = debug { self.colors[.debug]!.background = colorStringFromHex(debug) }
         if let info  = info  { self.colors[.info ]!.background = colorStringFromHex(info ) }
@@ -201,7 +210,7 @@ public extension Theme.Builder {
  
  - returns: A string representation of the hex color.
  */
-private func colorStringFromHex(hex: UInt32) -> String {
+private func colorStringFromHex(hex: Theme.Color) -> String {
     let r = (hex & 0xFF0000) >> 16
     let g = (hex & 0x00FF00) >> 8
     let b = (hex & 0x0000FF)

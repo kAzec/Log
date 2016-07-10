@@ -62,7 +62,8 @@ class LogTests: XCTestCase {
     
     func testLog() {
         logger.theme = nil
-        logger.trace("No theme.")
+        logger.formatter = .minimal
+        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
@@ -70,7 +71,8 @@ class LogTests: XCTestCase {
 //        logger.fatal("A fatal log")
         
         logger.theme = .classic
-        logger.trace("classic theme.")
+        logger.formatter = .concise
+        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
@@ -78,7 +80,8 @@ class LogTests: XCTestCase {
 //        logger.fatal("A fatal log")
         
         logger.theme = .solarized
-        logger.trace("solarized theme.")
+        logger.formatter = .basic
+        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
@@ -86,7 +89,8 @@ class LogTests: XCTestCase {
 //        logger.fatal("A fatal log")
         
         logger.theme = .flat
-        logger.trace("flat theme.")
+        logger.formatter = .verbose
+        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")

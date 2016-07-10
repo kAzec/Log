@@ -24,18 +24,22 @@
 
 
 public final class Formatter: CustomStringConvertible {
-    public enum AlignDirection {
-        case left, right
+    public enum LevelFormatterOption {
+        case none
+        case equalWidthByPrependingSpace
+        case equalWidthByAppendingSpace
+        case equalWidthByTruncatingTail(width: Int)
     }
     
     public enum Component {
         case date(format: String)
-        case level(equalWidth: Bool, align: AlignDirection)
+        case level(LevelFormatterOption)
         case file(fullPath: Bool, withExtension: Bool)
         case line
         case function
         case location
         case message
+        case custom(content: Void -> String)
     }
     
     /// The formatter format.
@@ -90,18 +94,20 @@ public final class Formatter: CustomStringConvertible {
             switch component {
             case .date(let format):
                 return colorize(as: .date, formatDate(date, format: format))
-            case .level(let equalWidth, let align):
-                return colorize(as: .level, formatLevel(level, equalWidth: equalWidth, align: align))
+            case .level(let option):
+                return colorize(as: .level, formatLevel(level, option: option))
             case .file(let fullPath, let withExtension):
                 return colorize(as: .file, formatFile(file, fullPath: fullPath, withExtension: withExtension))
             case .function:
                 return colorize(as: .function, formatFunction(function))
             case .line:
-                return colorize(as: .line, formathLine(line))
+                return colorize(as: .line, String(line))
             case .location:
                 return colorize(as: .location, formatLocation(file: file, line: line))
             case .message:
                 return colorize(as: .message, formatMessage(items, separator: separator))
+            case .custom(content: let content):
+                return colorize(as: .custom, content())
             }
         }
         
@@ -124,23 +130,25 @@ private extension Formatter {
     }
     
     /**
-     Formats a level component.
+     Formats a level component with specified format option.
      
-     - parameter level: The level component.
+     - parameter level:  The level component.
+     - parameter option: The format option.
      
      - returns: The formatted level component.
      */
-    func formatLevel(level: Level, equalWidth: Bool, align: AlignDirection) -> String {
+    func formatLevel(level: Level, option: LevelFormatterOption) -> String {
         let text = level.description
+        let space = " "
         
-        if equalWidth && text.characters.count == 4 {
-            switch align {
-            case .left:
-                return text + " "
-            case .right:
-                return " " + text
-            }
-        } else {
+        switch option {
+        case .equalWidthByAppendingSpace:
+            return text.characters.count == 4 ? text + space : text
+        case .equalWidthByPrependingSpace:
+            return text.characters.count == 4 ? space + text : text
+        case .equalWidthByTruncatingTail(width: let width):
+            return text.characters.count > width ? text.substringToIndex(text.startIndex.advancedBy(width)) : text
+        case .none:
             return text
         }
     }
@@ -178,17 +186,6 @@ private extension Formatter {
         } else {
             return function
         }
-    }
-    
-    /**
-     Formats a line componnet
-     
-     - parameter line: The line number.
-     
-     - returns: The formatted line component.
-     */
-    func formathLine(line: Int) -> String {
-        return String(line)
     }
     
     /**

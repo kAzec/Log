@@ -117,7 +117,7 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func trace(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+    public func trace<S: SequenceType>(@autoclosure items: Void -> S, separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
         log(.trace)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
@@ -159,7 +159,7 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func debug(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+    public func debug<S: SequenceType>(@autoclosure items: Void -> S, separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
         log(.debug)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
@@ -201,7 +201,7 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func info(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+    public func info<S: SequenceType>(@autoclosure items: Void -> S, separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
         log(.info)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
@@ -243,7 +243,7 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func warn(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+    public func warn<S: SequenceType>(@autoclosure items: Void -> S, separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
         log(.warn)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
@@ -285,7 +285,7 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func error(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+    public func error<S: SequenceType>(@autoclosure items: Void -> S, separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
         log(.error)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
     }
     
@@ -330,7 +330,7 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     @noreturn
-    public func fatal(@autoclosure items: Void -> [Any], separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+    public func fatal<S: SequenceType>(@autoclosure items: Void -> S, separator: String = " ", terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
         log(.fatal)?(items: items().map{ String($0) }, separator: separator, terminator: terminator, file: file, line: line, function: function)
         exit(EXIT_FAILURE)
     }
