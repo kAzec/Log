@@ -66,6 +66,7 @@ public class Logger {
     }
     
     typealias LogEntry = (items: [String], separator: String, terminator: String, file: String, line: Int, function: String) -> Void
+
     private func log(level: Level) -> LogEntry? {
         guard enabled && level >= self.level else {
             return nil
@@ -103,8 +104,8 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func trace(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.trace)?(items: [message()], separator: "", terminator: terminator, file: file, line: line, function: function)
+    public func trace(@autoclosure item: Void -> Any, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+        log(.trace)?(items: [String(item())], separator: "", terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -145,8 +146,8 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func debug(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.debug)?(items: [message()], separator: "", terminator: terminator, file: file, line: line, function: function)
+    public func debug(@autoclosure item: Void -> Any, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+        log(.debug)?(items: [String(item())], separator: "", terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -187,8 +188,8 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func info(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.info)?(items: [message()], separator: "", terminator: terminator, file: file, line: line, function: function)
+    public func info(@autoclosure item: Void -> Any, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+        log(.info)?(items: [String(item())], separator: "", terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -229,8 +230,8 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func warn(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.warn)?(items: [message()], separator: "", terminator: terminator, file: file, line: line, function: function)
+    public func warn(@autoclosure item: Void -> Any, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+        log(.warn)?(items: [String(item())], separator: "", terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -271,8 +272,8 @@ public extension Logger {
      - parameter line:       The line at which the log happens.
      - parameter function:   The function in which the log happens.
      */
-    public func error(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.error)?(items: [message()], separator: "", terminator: terminator, file: file, line: line, function: function)
+    public func error(@autoclosure item: Void -> Any, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+        log(.error)?(items: [String(item())], separator: "", terminator: terminator, file: file, line: line, function: function)
     }
     
     /**
@@ -314,8 +315,8 @@ public extension Logger {
      - parameter function:   The function in which the log happens.
      */
     @noreturn
-    public func fatal(@autoclosure message: Void -> String, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
-        log(.fatal)?(items: [message()], separator: "", terminator: terminator, file: file, line: line, function: function)
+    public func fatal(@autoclosure item: Void -> Any, terminator: String = "\n", file: String = #file, line: Int = #line, function: String = #function) {
+        log(.fatal)?(items: [String(item())], separator: "", terminator: terminator, file: file, line: line, function: function)
         exit(EXIT_FAILURE)
     }
     

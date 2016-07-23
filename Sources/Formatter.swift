@@ -22,7 +22,6 @@
 // SOFTWARE.
 //
 
-
 public final class Formatter: CustomStringConvertible {
     public enum LevelFormatterOption {
         case none
