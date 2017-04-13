@@ -28,7 +28,7 @@ public enum Level: String {
     case trace, debug, info, warn, error, fatal
     
     var description: String {
-        return self.rawValue.uppercaseString
+        return self.rawValue.uppercased()
     }
 }
 

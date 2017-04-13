@@ -40,8 +40,8 @@ class LogTests: XCTestCase {
     
     func testREADMEExample() {
         let (one, two, three) = ("ONE", "TWO", "THREE")
-        let error = NSURLError.Cancelled as NSError
-        let Log = Logger(formatter: .verbose, theme: .classic())
+        let error = URLError.cancelled
+        let Log = Logger(formatter: .verbose, theme: nil)
         
         Log.trace("Called!!!")
         Log.debug(["Who is self: ", self])
@@ -49,7 +49,7 @@ class LogTests: XCTestCase {
         Log.warn([one, two, three], separator: " - ")
         Log.error([error], terminator: "😱😱😱\n")
 //        Log.fatal("Fail fast!") // @noreturn
-        NSThread.sleepForTimeInterval(0.01)
+        Thread.sleep(forTimeInterval: 0.01)
     }
     
     func testLevel() {
@@ -63,40 +63,40 @@ class LogTests: XCTestCase {
     func testLog() {
         logger.theme = nil
         logger.formatter = .minimal
-        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
+        logger.trace("Theme: \(String(describing: logger.theme)). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        logger.theme = .classic(.level)
+//        logger.theme = .classic(.level)
         logger.formatter = .concise
-        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
+        logger.trace("Theme: \(String(describing: logger.theme)). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        logger.theme = .solarized([.level, .message])
+//        logger.theme = .solarized([.level, .message])
         logger.formatter = .basic
-        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
+        logger.trace("Theme: \(String(describing: logger.theme)). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        logger.theme = .flat(.all)
+//        logger.theme = .flat(.all)
         logger.formatter = .verbose
-        logger.trace("Theme: \(logger.theme). Formatter: \(logger.formatter)")
+        logger.trace("Theme: \(String(describing: logger.theme)). Formatter: \(logger.formatter)")
         logger.debug("A debug log")
         logger.info("A info log")
         logger.warn("A warn log")
         logger.error("A error log")
 //        logger.fatal("A fatal log")
         
-        NSThread.sleepForTimeInterval(0.01)
+        Thread.sleep(forTimeInterval: 0.01)
     }
 }

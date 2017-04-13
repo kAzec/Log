@@ -22,28 +22,29 @@
 // SOFTWARE.
 //
 
-extension Formatter {
-    public static let minimal = Formatter("%@ | %@ > %@", [
+public extension Formatter {
+    
+    static let minimal = Formatter("%@ | %@ > %@", [
         .level(.equalWidthByTruncatingTail(width: 1)),
         .location,
         .message
     ])
     
-    public static let concise = Formatter("[%@] %@ | %@ > %@", [
+    static let concise = Formatter("[%@] %@ | %@ > %@", [
         .date(format: "HH:mm:ss"),
         .level(.equalWidthByTruncatingTail(width: 4)),
         .location,
         .message
     ])
 
-    public static let basic = Formatter("[%@] %@ | %@ > %@", [
+    static let basic = Formatter("[%@] %@ | %@ > %@", [
         .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
         .level(.equalWidthByPrependingSpace),
         .location,
         .message
     ])
     
-    public static let verbose = Formatter("[%@] %@ | %@:%@ - %@\n> %@", [
+    static let verbose = Formatter("[%@] %@ | %@:%@ - %@\n> %@", [
         .date(format: "yyyy-MM-dd HH:mm:ss.SSS"),
         .level(.equalWidthByPrependingSpace),
         .file(fullPath: false, withExtension: true),

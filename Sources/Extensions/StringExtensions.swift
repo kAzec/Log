@@ -23,45 +23,36 @@
 //
 
 extension String {
-    /// The last path component of the receiver.
-    var lastPathComponent: String {
-        return NSString(string: self).lastPathComponent
-    }
-    
-    /// A new string made by deleting the extension from the receiver.
-    var stringByDeletingPathExtension: String {
-        return NSString(string: self).stringByDeletingPathExtension
-    }
     
     /**
      Returns a string colored with the specified foreground color.
      
-     - parameter fgColor: The string representation of the foreground color.
+     - parameter color: The string representation of the foreground color.
      
      - returns: A string colored with the specified foreground color.
      */
-    func withForegroundColor(color: String) -> String {
+    func withForegroundColor(_ color: String) -> String {
         return "\u{001b}[fg\(color);\(self)\u{001b}[fg;"
     }
     
     /**
      Returns a string colored with the specified background color.
      
-     - parameter fgColor: The string representation of the background color.
+     - parameter color: The string representation of the background color.
      
      - returns: A string colored with the specified background color.
      */
-    func withBackgroundColor(color: String) -> String {
+    func withBackgroundColor(_ color: String) -> String {
         return "\u{001b}[bg\(color);\(self)\u{001b}[bg;"
     }
     
-    func withColor(foreground foreground: String?, background: String?) -> String {
+    func withColor(foreground: String?, background: String?) -> String {
         switch (foreground, background) {
-        case (.Some(let foreground), .Some(let background)):
+        case (.some(let foreground), .some(let background)):
             return "\u{001b}[fg\(foreground);\u{001b}[bg\(background);\(self)\u{001b}[;"
-        case (.Some(let foreground), .None):
+        case (.some(let foreground), .none):
             return withForegroundColor(foreground)
-        case (.None, .Some(let background)):
+        case (.none, .some(let background)):
             return withBackgroundColor(background)
         default:
             return self

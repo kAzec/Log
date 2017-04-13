@@ -38,7 +38,7 @@ public final class Formatter: CustomStringConvertible {
         case function
         case location
         case message
-        case custom(content: Void -> String)
+        case custom(content: () -> String)
     }
     
     /// The formatter format.
@@ -48,12 +48,12 @@ public final class Formatter: CustomStringConvertible {
     private var components: [Component]
     
     /// The date formatter.
-    private let dateFormatter = NSDateFormatter()
+    private let dateFormatter = DateFormatter()
     
     /// The formatter textual representation.
     public var description: String {
-        return String(format: format, arguments: components.map { (component: Component) -> CVarArgType in
-            return "#" + String(component)
+        return String(format: format, arguments: components.map { (component: Component) -> CVarArg in
+            return "#" + String(describing: component)
         })
     }
     
@@ -83,13 +83,13 @@ public final class Formatter: CustomStringConvertible {
      
      - returns: The formatted string.
      */
-    func format(level level: Level, items: [String], separator: String, file: String, line: Int, function: String, date: NSDate, theme: Theme? = nil) -> String {
+    func format(level: Level, items: [String], separator: String, file: String, line: Int, function: String, date: Date, theme: Theme? = nil) -> String {
         
         func colorize(as option: Theme.ComponentOptions, _ text: String) -> String {
             return theme?.colorizeText(text, level: level, option: option) ?? text
         }
 
-        let arguments = components.map { component -> CVarArgType in
+        let arguments = components.map { component -> CVarArg in
             switch component {
             case .date(let format):
                 return colorize(as: .date, formatDate(date, format: format))
@@ -112,9 +112,7 @@ public final class Formatter: CustomStringConvertible {
         
         return String(format: format, arguments: arguments)
     }
-}
 
-private extension Formatter {
     /**
      Formats a date component with the specified date format.
      
@@ -123,9 +121,9 @@ private extension Formatter {
      
      - returns: The formatted date component.
      */
-    func formatDate(date: NSDate, format: String) -> String {
+    func formatDate(_ date: Date, format: String) -> String {
         dateFormatter.dateFormat = format
-        return dateFormatter.stringFromDate(date)
+        return dateFormatter.string(from: date)
     }
     
     /**
@@ -136,7 +134,7 @@ private extension Formatter {
      
      - returns: The formatted level component.
      */
-    func formatLevel(level: Level, option: LevelFormatterOption) -> String {
+    func formatLevel(_ level: Level, option: LevelFormatterOption) -> String {
         let text = level.description
         let space = " "
         
@@ -146,7 +144,7 @@ private extension Formatter {
         case .equalWidthByPrependingSpace:
             return text.characters.count == 4 ? space + text : text
         case .equalWidthByTruncatingTail(width: let width):
-            return text.characters.count > width ? text.substringToIndex(text.startIndex.advancedBy(width)) : text
+            return text.characters.count > width ? text.substring(to: text.characters.index(text.startIndex, offsetBy: width)) : text
         case .none:
             return text
         }
@@ -161,11 +159,11 @@ private extension Formatter {
      
      - returns: The formatted file component.
      */
-    func formatFile(file: String, fullPath: Bool, withExtension: Bool) -> String {
+    func formatFile(_ file: String, fullPath: Bool, withExtension: Bool) -> String {
         var file = file
         
-        if !fullPath      { file = file.lastPathComponent }
-        if !withExtension { file = file.stringByDeletingPathExtension }
+        if !fullPath      { file = (file as NSString).lastPathComponent }
+        if !withExtension { file = (file as NSString).deletingPathExtension }
         
         return file
     }
@@ -173,14 +171,13 @@ private extension Formatter {
     /**
      Formats a function componnet
      
-     *In Swift 2.2 funciton with only unlabeled parameter will have its name ended without brackets.(e.g. **`#function`** is **`foo`** rather than **`foo(_:)`** or **`foo(_:_:)`** etc). It's weired since even the name of a function without parameters will be something like **`foo()`** rather than **`foo`***.
-     
      - parameter function: The function.
      
      - returns: The formatted function component.
      */
-    func formatFunction(function: String) -> String {
+    func formatFunction(_ function: String) -> String {
         if !function.hasSuffix(")") {
+            // Add missing parameters indicators to distinguish function with others.
             return function + "(...)"
         } else {
             return function
@@ -195,11 +192,11 @@ private extension Formatter {
      
      - returns: The formatted location component.
      */
-    func formatLocation(file file: String, line: Int) -> String {
+    func formatLocation(file: String, line: Int) -> String {
         return [
             formatFile(file, fullPath: false, withExtension: true),
             String(line)
-        ].joinWithSeparator(":")
+        ].joined(separator: ":")
     }
     
     /**
@@ -210,7 +207,7 @@ private extension Formatter {
      
      - returns: The formatted message component.
      */
-    func formatMessage(items: [String], separator: String) -> String {
-        return items.joinWithSeparator(separator)
+    func formatMessage(_ items: [String], separator: String) -> String {
+        return items.joined(separator: separator)
     }
 }

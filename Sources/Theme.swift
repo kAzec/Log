@@ -26,7 +26,7 @@ public final class Theme: CustomStringConvertible {
     public typealias Color = UInt32
     typealias ColorDict = [Level: (foreground: String?, background: String?)]
 
-    public struct ComponentOptions: OptionSetType {
+    public struct ComponentOptions: OptionSet {
         public let rawValue : Int
         
         public init(rawValue: Int) {
@@ -47,10 +47,10 @@ public final class Theme: CustomStringConvertible {
     
     public final class Builder {
         /// The colors of the theme.
-        private(set) var colors: ColorDict
+        fileprivate(set) var colors: ColorDict
         
         /// The colorize options of the theme.
-        private(set) var options: ComponentOptions
+        fileprivate(set) var options: ComponentOptions
         
         init(colors: ColorDict, options: ComponentOptions) {
             self.colors = colors
@@ -70,11 +70,11 @@ public final class Theme: CustomStringConvertible {
     
     /// The theme textual representation.
     public var description: String {
-        return colors.keys.sort().map{
+        return colors.keys.sorted().map{
             let foreground = self.colors[$0]!.foreground
             let background = self.colors[$0]!.background
             return $0.description.withColor(foreground: foreground, background: background)
-        }.joinWithSeparator(" ")
+        }.joined(separator: " ")
     }
     
     /**
@@ -89,7 +89,7 @@ public final class Theme: CustomStringConvertible {
         self.options = builder.options
     }
     
-    func colorizeText(text: String, level: Level, option: ComponentOptions) -> String {
+    func colorizeText(_ text: String, level: Level, option: ComponentOptions) -> String {
         if options.contains(option) {
             return text.withColor(foreground: colors[level]!.foreground, background: colors[level]!.background)
         } else {
@@ -125,7 +125,7 @@ public extension Theme {
      
      - returns: A theme builder with the specified foreground colors.
      */
-    class func new(trace trace: Color, debug: Color, info: Color, warn: Color, error: Color, fatal: Color) -> Builder {
+    class func new(trace: Color, debug: Color, info: Color, warn: Color, error: Color, fatal: Color) -> Builder {
         return Builder(
             colors: [
                 .trace: (colorStringFromHex(trace), nil),
@@ -153,7 +153,7 @@ public extension Theme.Builder {
      
      - returns: A theme builder  with the specified foreground colors.
      */
-    func foreground(trace trace: Theme.Color? = nil, debug: Theme.Color? = nil, info: Theme.Color? = nil, warn: Theme.Color? = nil, error: Theme.Color? = nil, fatal: Theme.Color? = nil) -> Theme.Builder {
+    func foreground(trace: Theme.Color? = nil, debug: Theme.Color? = nil, info: Theme.Color? = nil, warn: Theme.Color? = nil, error: Theme.Color? = nil, fatal: Theme.Color? = nil) -> Theme.Builder {
         if let trace = trace { self.colors[.trace]!.foreground = colorStringFromHex(trace) }
         if let debug = debug { self.colors[.debug]!.foreground = colorStringFromHex(debug) }
         if let info  = info  { self.colors[.info ]!.foreground = colorStringFromHex(info ) }
@@ -176,7 +176,7 @@ public extension Theme.Builder {
      
      - returns: A theme builder  with the specified background colors.
      */
-    func background(trace trace: Theme.Color? = nil, debug: Theme.Color? = nil, info: Theme.Color? = nil, warn: Theme.Color? = nil, error: Theme.Color? = nil, fatal: Theme.Color? = nil) -> Theme.Builder {
+    func background(trace: Theme.Color? = nil, debug: Theme.Color? = nil, info: Theme.Color? = nil, warn: Theme.Color? = nil, error: Theme.Color? = nil, fatal: Theme.Color? = nil) -> Theme.Builder {
         if let trace = trace { self.colors[.trace]!.background = colorStringFromHex(trace) }
         if let debug = debug { self.colors[.debug]!.background = colorStringFromHex(debug) }
         if let info  = info  { self.colors[.info ]!.background = colorStringFromHex(info ) }
@@ -194,7 +194,7 @@ public extension Theme.Builder {
      
      - returns: A theme builder with the specified components options.
      */
-    func components(options: Theme.ComponentOptions) -> Theme.Builder {
+    func components(_ options: Theme.ComponentOptions) -> Theme.Builder {
         self.options = options
         
         return self
@@ -210,10 +210,10 @@ public extension Theme.Builder {
  
  - returns: A string representation of the hex color.
  */
-private func colorStringFromHex(hex: Theme.Color) -> String {
+private func colorStringFromHex(_ hex: Theme.Color) -> String {
     let r = (hex & 0xFF0000) >> 16
     let g = (hex & 0x00FF00) >> 8
     let b = (hex & 0x0000FF)
     
-    return [r, g, b].map({ String($0) }).joinWithSeparator(",")
+    return [r, g, b].map({ String($0) }).joined(separator: ",")
 }
